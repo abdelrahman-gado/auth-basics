@@ -36,4 +36,26 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
+app.get("/sign-up", (req, res) => {
+  res.render("sign-up-form");
+});
+
+// Note: There is no sanitation here, for the sake of simplicity
+// Note: The project will store the password as a plain text in DB for the sake of
+// simplicity, I will hash it later.
+app.post("/sign-up", (req, res, next) => {
+  const user = new User({
+    username: req.body.username,
+    password: req.body.password,
+  });
+
+  user.save((err) => {
+    if (err) {
+      return next(err);
+    }
+
+    res.redirect("/");
+  });
+});
+
 app.listen(3000, () => console.log("app listening on port 3000!"));
