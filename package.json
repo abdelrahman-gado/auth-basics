@@ -1,0 +1,20 @@
+{
+  "name": "auth-basics",
+  "version": "1.0.0",
+  "description": "A project for learning the authentication basics with Express, Passportjs and MongoDB",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abdelrahman-gado/auth-basics.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abdelrahman-gado/auth-basics/issues"
+  },
+  "homepage": "https://github.com/abdelrahman-gado/auth-basics#readme"
+}
