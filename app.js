@@ -41,11 +41,15 @@ passport.use(
         return done(null, false, { message: "Incorrect username" });
       }
 
-      if (user.password !== password) {
-        return done(null, false, { message: "Incorrect password" });
-      }
-
-      return done(null, user);
+      bcrypt.compare(password, user.password, (err, res) => {
+        if (res) {
+          // password match! log user in
+          return done(null, user);
+        } else {
+          // passwords do not match.
+          return done(null, false, { message: "Incorrct password" });
+        }
+      });
     });
   })
 );
@@ -84,9 +88,7 @@ app.get("/sign-up", (req, res) => {
 
 // Note: There is no sanitation here, for the sake of simplicity.
 app.post("/sign-up", (req, res, next) => {
-
   bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
-    
     if (err) {
       return next(err);
     }
@@ -103,7 +105,6 @@ app.post("/sign-up", (req, res, next) => {
 
       res.redirect("/");
     });
-
   });
 });
 
