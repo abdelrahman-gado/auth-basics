@@ -4,6 +4,7 @@ const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 const Schema = mongoose.Schema;
 
@@ -81,21 +82,28 @@ app.get("/sign-up", (req, res) => {
   res.render("sign-up-form");
 });
 
-// Note: There is no sanitation here, for the sake of simplicity
-// Note: The project will store the password as a plain text in DB for the sake of
-// simplicity, I will hash it later.
+// Note: There is no sanitation here, for the sake of simplicity.
 app.post("/sign-up", (req, res, next) => {
-  const user = new User({
-    username: req.body.username,
-    password: req.body.password,
-  });
 
-  user.save((err) => {
+  bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
+    
     if (err) {
       return next(err);
     }
 
-    res.redirect("/");
+    const user = new User({
+      username: req.body.username,
+      password: hashedPassword,
+    });
+
+    user.save((err) => {
+      if (err) {
+        return next(err);
+      }
+
+      res.redirect("/");
+    });
+
   });
 });
 
