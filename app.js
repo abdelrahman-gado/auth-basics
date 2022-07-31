@@ -67,6 +67,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 
+// Pass current authenticated user to locals to access it in views.
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
+  next();
+});
+
 app.get("/", (req, res) => {
   res.render("index", { user: req.user });
 });
