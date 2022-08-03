@@ -6,10 +6,11 @@ const LocalStrategy = require("passport-local").Strategy;
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
+require('dotenv').config();
+
 const Schema = mongoose.Schema;
 
-const mongoDb =
-  "mongodb+srv://abdogado:abdogado@cluster0.wweh2.mongodb.net/auth-basics?retryWrites=true&w=majority";
+const mongoDb = process.env.DB_STRING;
 
 mongoose.connect(mongoDb, { useUnifiedTopology: true, useNewUrlParser: true });
 const db = mongoose.connection;
@@ -28,7 +29,13 @@ const app = express();
 app.set("views", __dirname);
 app.set("view engine", "ejs");
 
-app.use(session({ secret: "cats", resave: false, saveUninitialized: true }));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 
 passport.use(
   new LocalStrategy((username, password, done) => {
